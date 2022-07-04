@@ -1,24 +1,24 @@
 
 
-function createCalculator(){
-    return {
-        display: document.querySelector('.display'),
-        btnClear: document.querySelector('.btn-clear'),
+function Calculator(){
+  
+        this.display = document.querySelector('.display'),
+        
 
-        start(){
+        this.start = () => {
             this.clickButton();
             this.enterButton();
-         },
+         }
 
-        clearDisplay(){
+        this.clearDisplay = ()=> {
             this.display.value ='';
-        },
-        backSpace(){
+        }
+        this.backSpace =() =>{
             this.display.value = this.display.value.slice(0, -1);
-        },
+        }
 
         
-        resultEqual(){
+        this.resultEqual = () =>{
             let cont = this.display.value;
             try {
                cont = eval(cont);
@@ -31,42 +31,36 @@ function createCalculator(){
                 alert('Conta invalida');
                 return;
             }
-        },
-        enterButton() {
+        }
+        this.enterButton = () => {
             this.display.addEventListener('keyup', e =>{
                 if(e.keyCode === 13){
                     this.resultEqual();
                 }
             });
 
-        },
-       
+        }
+        this.clickButton = () => {
+            document.addEventListener('click', event =>{
+                const el = event.target;
+                if(el.classList.contains('btn-num'))this.btnForDisplay(el);
+                
+                if(el.classList.contains('btn-clear'))this.clearDisplay();
+                  
+                if(el.classList.contains('btn-del'))this.backSpace();
+                    
+                if(el.classList.contains('btn-eq'))this.resultEqual();
+                  
+                
 
-        clickButton(){
-            document.addEventListener('click', function(e){
-                const el = e.target;
-                if(el.classList.contains('btn-num')){
-                    this.btnForDisplay(el.innerText);
-                }
-                if(el.classList.contains('btn-clear')){
-                    this.clearDisplay();
-                }
-                if(el.classList.contains('btn-del')){
-                    this.backSpace();
-                }
-                if(el.classList.contains('btn-eq')){
-                    this.resultEqual();
-                }
-                this.display.focus();
-
-            }.bind(this));
-        },
-
-        btnForDisplay(valor) {
-            this.display.value += valor;
+            });
+        }  
+        this.btnForDisplay = el => {
+            this.display.value += el.innerText;
+            this.display.focus();
         }
     };
-}
 
-const calculator = createCalculator();
+
+const calculator = new Calculator();
 calculator.start();
